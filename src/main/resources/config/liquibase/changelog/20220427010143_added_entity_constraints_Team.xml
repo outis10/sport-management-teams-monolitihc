@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity Team.
+    -->
+    <changeSet id="20220427010143-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="team"
+                                 constraintName="fk_team__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stm_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="updated_by_id"
+                                 baseTableName="team"
+                                 constraintName="fk_team__updated_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stm_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="team_id"
+                                 baseTableName="rel_team__owner"
+                                 constraintName="fk_rel_team__owner__team_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="team"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="rel_team__owner"
+                                 constraintName="fk_rel_team__owner__owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stm_user"/>
+    </changeSet>
+</databaseChangeLog>

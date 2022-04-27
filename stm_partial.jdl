@@ -1,0 +1,111 @@
+
+application {
+  config {
+    baseName stManagement,
+    applicationType monolith,
+    packageName com.outis.stm,
+    authenticationType oauth2,
+    prodDatabaseType postgresql,
+    buildTool gradle,
+    testFrameworks [cypress],
+    clientFramework react,
+    enableTranslation true,
+    nativeLanguage es,
+    languages [es, en],
+    jhiPrefix stm,
+    enableHibernateCache true,
+    cacheProvider ehcache,
+    skipClient true
+  }
+  entities *
+}
+
+entity User {}
+
+
+entity PersonalData {
+    phone String
+    fullName String required
+    birthDay LocalDate
+}
+
+entity Organization {
+    name String required
+    description String
+}
+
+entity Team {
+	name String required
+    shortName String
+}
+
+entity TeamOrganization {
+	active Boolean
+        createdAt Instant
+}
+
+entity Sport {
+	name String required
+    slotsByGame Integer required min(1)
+}
+
+
+
+enum EntityNameEnum {
+	ORG("Organization")
+    Member("Member")
+}
+
+enum AttachmentTypeEnum {
+  PHOTO("Photo")
+  IMAGE("Image") 
+  DOCUMENT("Document") 
+  THUMBNAIL("Thumbnail")
+  CSV
+  EXCEL
+}
+
+enum LanguageEnum {
+	EN("English")
+	ES("Spanish")
+}
+enum HandSideEnum {
+  LEFT ("L")
+  RIGHT("R")
+  SWITH("S")
+}
+
+enum PositionTypeEnum {
+	STAF("Staff")
+	PLAYER("Player")
+}
+
+enum SlotTypeEnum {
+INNINGS("Innings")
+QUARTER("Quarter")
+HALF("Half")
+}
+
+relationship OneToOne {
+	PersonalData{ user} to User
+}
+
+relationship ManyToOne {
+    Organization { createdBy(login) required } to User
+    TeamOrganization { team (name) required} to Team
+    TeamOrganization{ organization(name) required} to Organization
+    TeamOrganization { createdBy(login) required} to User
+    PersonalData {createdBy(login) required} to User
+    PersonalData {updatedBy(login)} to User
+    Team {createdBy(login) required} to User
+    Team {updatedBy(login)} to User
+}
+
+relationship ManyToMany {
+  Organization {Owner (login)} to User
+  Team {Owner (login)} to User
+}
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
